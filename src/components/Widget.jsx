@@ -5,7 +5,7 @@ const WidgetPopup = () => {
   const [showModal, setShowModal] = useState(false);
 
   const handleButtonClick = () => {
-    setShowModal(true);
+    setShowModal(!showModal);
   };
 
   const handleCloseModal = () => {

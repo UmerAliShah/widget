@@ -3,9 +3,13 @@
   bottom: 20px;
   right: 20px;
 }
-
+body {
+  background-color: transparent;
+  position: relative;
+}
 .widget-popup {
-  position: fixed;
+  position: absolute;
+  z-index: 1000;
   bottom: 100px;
   right: 10px;
 }
