@@ -1,11 +1,10 @@
 import logo from "./logo.svg";
 import "./App.css";
-import WidgetPopup from "./components/Widget";
-
+import DummayPage from "./components/DummayPage"
 function App() {
   return (
     <div>
-      <WidgetPopup />
+      <DummayPage />
     </div>
   );
 }
