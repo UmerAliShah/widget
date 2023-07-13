@@ -11,6 +11,9 @@ const WidgetPopup = () => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+  const handleAmountClick = (am) => {
+    console.log(am, "am");
+  };
 
   return (
     <>
@@ -27,15 +30,15 @@ const WidgetPopup = () => {
           <Modal.Title>Widget Popup</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <Button>
-                10
-            </Button>
-            <Button>
-                20
-            </Button>
-            <Button>
-                30
-            </Button>
+          <Button value="10" onClick={(e) => handleAmountClick(e.target.value)}>
+            10
+          </Button>
+          <Button value="20" onClick={(e) => handleAmountClick(e.target.value)}>
+            20
+          </Button>
+          <Button value="30" onClick={(e) => handleAmountClick(e.target.value)}>
+            30
+          </Button>
           <p>This is the content of the widget popup.</p>
         </Modal.Body>
         <Modal.Footer>
