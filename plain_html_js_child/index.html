@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parent Page</title>
+    <link href="../src/App.css" />
+</head>
+<style>
+	iframe#widgetFrame{
+        width: 550px;
+        height: 440px;
+		border:none;
+		position:absolute;
+		bottom:0;
+		right:0;
+	}
+</style>
+<body>
+    <h1>Parent Page</h1>
+    <iframe id="widgetFrame" src="http://localhost:3000/" title="Widget IFrame"></iframe>
+    <table>
+        <thead>
+            <tr>
+                <th>Organization</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="donationTableBody">
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var receivedData = [];
+            console.log(receivedData, "coming from widget");
+
+            function handleMessage(event) {
+                console.log(event, "widget handle");
+
+                var donationData = event.data.donationData;
+                receivedData = donationData;
+                updateTable();
+            }
+            /*
+            function handleIframeLoad() {
+                var iframe = document.getElementById("widgetFrame");
+                var message = { type: "INITIALIZE" };
+                iframe.contentWindow.postMessage(message, "http://localhost:3000/");
+            }
+            */
+
+            function updateTable() {
+                var tableBody = document.getElementById("donationTableBody");
+                tableBody.innerHTML = "";
+
+                receivedData.forEach(function(donation, index) {
+                    var row = document.createElement("tr");
+                    var organizationCell = document.createElement("td");
+                    organizationCell.textContent = donation.organization;
+                    var amountCell = document.createElement("td");
+                    amountCell.textContent = "$" + donation.amount;
+
+                    row.appendChild(organizationCell);
+                    row.appendChild(amountCell);
+                    tableBody.appendChild(row);
+                });
+            }
+
+            window.addEventListener("message", handleMessage);
+            //handleIframeLoad();
+            /*
+            window.addEventListener("beforeunload", function() {
+                window.removeEventListener("message", handleMessage);
+            });
+            */
+        });
+    </script>
+</body>
+</html>
