@@ -2,18 +2,21 @@
 <html>
 <head>
     <title>Parent Page</title>
+    <link href="../src/App.css" />
 </head>
 <style>
 	iframe#widgetFrame{
+        width: 550px;
+        height: 440px;
 		border:none;
-		position:fixed;
+		position:absolute;
 		bottom:0;
-		right:0
+		right:0;
 	}
 </style>
 <body>
     <h1>Parent Page</h1>
-    <iframe id="widgetFrame" src="http://localhost:3000/" width="400" height="300" title="Widget IFrame"></iframe>
+    <iframe id="widgetFrame" src="http://localhost:3000/" title="Widget IFrame"></iframe>
     <table>
         <thead>
             <tr>

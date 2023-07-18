@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button, Modal, FormControl, InputGroup } from "react-bootstrap";
 import img_logo from '../images/heart_logo.png';
+import logo from '../images/logo.png';
+import logo2 from '../images/logo2.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -24,14 +26,14 @@ const WidgetPopup = () => {
       logo:img_logo
     },
     { 
-      name: "Donation To medicine Wise",
+      name: "Donation Sahara life",
       description:"Donate and Help Companies Redistributes Surplus Medicines to People In Need",
       logo:img_logo
     },
     { 
-      name: "Donation To cloth Wise",
+      name: "Donation Eidi Center",
       description:"Donate and Help Companies Redistributes Surplus cloths to People In Need",
-      logo:img_logo
+      logo:logo
     }
     // { name: "WE are needy" },
   ];
@@ -72,8 +74,8 @@ const WidgetPopup = () => {
             {organizations.map((org, index) => (
               <div className="main-slide" key={index}>
                 <h5 className="text-dark">{org.name}</h5>
-                <div>
-                  <img src={org.logo} alt="" />
+                <div className="com-info">
+                  <a href="#"><img src={org.logo} alt="" /></a>
                   <p className="text-dark">{org.description}</p>
                 </div>
                 <div className="Actions">
