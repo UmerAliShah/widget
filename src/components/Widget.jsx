@@ -94,7 +94,7 @@ const WidgetPopup = () => {
   };
 
   return (
-    <>
+    <div className="widget">
       <div className="widget-button" style={{backgroundColor:"transparent"}}>
         <Button className="btn text-white" onClick={handleButtonClick}>Open Widget</Button>
       </div>
@@ -175,7 +175,7 @@ const WidgetPopup = () => {
           </div>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 };
 
