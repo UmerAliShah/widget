@@ -3,19 +3,19 @@
   bottom: 20px;
   right: 20px;
 }
+.widget {
+  position: fixed;
+  right: 20px;
+  z-index: 9999;
+}
+
 .widget-popup {
-  position: absolute;
-  right: 0;
-  bottom: 20px;
+  position: fixed !important;
+  right: 10px !important;
+  z-index: 999;
 }
 .widget-button Button {
   background: linear-gradient(180deg, rgba(15, 75, 165, 0.8) 0%, rgba(6, 63, 149, 0.64) 100%);
-}
-.modal-dialog {
-  position: absolute;
-  top: 10px;
-  right: 0px;
-  bottom: 20px;
 }
 .com-info {
   padding: 10px 5px 10px 5px;
@@ -26,11 +26,6 @@
 }
 .modal-content {
   padding: 1rem;
-}
-.widget-popup {
-  position: fixed;
-  bottom: 100px;
-  right: 10px;
 }
 .Actions {
   width: 100%;
