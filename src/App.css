@@ -3,9 +3,78 @@
   bottom: 20px;
   right: 20px;
 }
-
+.widget-popup {
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+}
+.widget-button Button {
+  background: linear-gradient(180deg, rgba(15, 75, 165, 0.8) 0%, rgba(6, 63, 149, 0.64) 100%);
+}
+.modal-dialog {
+  position: absolute;
+  right: 0px;
+  bottom: 20px;
+}
+.modal-content {
+  padding: 1rem;
+}
 .widget-popup {
   position: fixed;
   bottom: 100px;
   right: 10px;
+}
+.Actions {
+  width: 100%;
+  display: flex;
+}
+.Actions Button {
+  width: 50px;
+  height: 35px;
+  background-color: #F0F8FF !important; 
+  margin: 5px;
+  color: #000000;
+}
+.main-slide {
+  padding: 1rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.Actions Button:hover {
+  background-color: gray !important; 
+  margin: 5px;
+  color: white;
+}
+.Actions .btn-2 {
+  background-color: #1597CE !important; 
+  color: white;
+}
+.Actions .field {
+  width: 200px;
+  margin-left: 5px;
+  height: 45px;
+  align-self: center;
+}
+.donate-btn {
+  background-color: #9C046F !important;
+  margin: 1.5rem 0 1rem 5px;
+}
+.field::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+
+}
+.slick-prev::before {
+  background-color: #000000;
+  border-radius: 50%;
+  left: 0.6rem;
+  top : calc(50% - 10px);
+  position: absolute;
+  color: white;
+}
+.slick-next::before {
+  background-color: #000000;
+  border-radius: 50%;
+  top : calc(45% - 10px);
+  right: 0.6rem;
+  position: absolute;
+  color: white;
 }
