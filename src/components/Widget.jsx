@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Modal, FormControl, InputGroup } from "react-bootstrap";
+import img_logo from '../images/heart_logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -17,10 +18,22 @@ const WidgetPopup = () => {
   const [donationData, setDonationData] = useState([]);
   console.log(donationData, 'saving in widget')
   const organizations = [
-    { name: "Organization 1" },
-    { name: "Organization 2" },
-    { name: "Organization 3" },
-    { name: "WE are needy" },
+    { 
+      name: "Donation To Food Wise",
+      description:"Donate and Help Companies Redistributes Surplus Food to People In Need",
+      logo:img_logo
+    },
+    { 
+      name: "Donation To medicine Wise",
+      description:"Donate and Help Companies Redistributes Surplus Medicines to People In Need",
+      logo:img_logo
+    },
+    { 
+      name: "Donation To cloth Wise",
+      description:"Donate and Help Companies Redistributes Surplus cloths to People In Need",
+      logo:img_logo
+    }
+    // { name: "WE are needy" },
   ];
 
   const handleButtonClick = () => {
@@ -59,6 +72,10 @@ const WidgetPopup = () => {
             {organizations.map((org, index) => (
               <div className="main-slide" key={index}>
                 <h5 className="text-dark">{org.name}</h5>
+                <div>
+                  <img src={org.logo} alt="" />
+                  <p className="text-dark">{org.description}</p>
+                </div>
                 <div className="Actions">
                   <Button className="btn-1" onClick={() => handleAmountClick(org, 10)}>10</Button>
                   <Button className="btn-2 active" onClick={() => handleAmountClick(org, 20)}>20</Button>
