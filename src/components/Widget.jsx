@@ -52,9 +52,13 @@ const WidgetPopup = () => {
     },
   ];
 
+  useEffect(() => {
+    window.top.postMessage({ event: showModal }, "https://zzra-017.dx.commercecloud.salesforce.com/");
+  }, [showModal]);
   const handleButtonClick = () => {
-    setShowModal(!showModal);
+    setShowModal(true);
   };
+  console.log(showModal, "modal console");
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -116,7 +120,7 @@ const WidgetPopup = () => {
         onHide={handleCloseModal}
         className="widget-popup"
         style={{
-          width:  "100%",
+          width: "100%",
           position: "fixed",
           bottom: "10px",
           right: "20px",
