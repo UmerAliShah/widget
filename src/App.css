@@ -1,10 +1,21 @@
 .widget-button {
   position: fixed;
   bottom: 20px;
+  padding: 5px;
   right: 20px;
 }
 body {
   background-color: rgba(255, 0, 0, 0) !important;
+}
+.widget-button .img-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0 8px 0 8px;
+}
+.widget-button Button {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 28px;
 }
 .widget {
   position: fixed;
@@ -85,4 +96,7 @@ body {
 }
 .widget-popup {
   background-color: white;
+}
+.remove-btn {
+  margin-top: 0.5rem;
 }
