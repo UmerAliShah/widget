@@ -55,7 +55,8 @@ const WidgetPopup = () => {
 
   
   const handleButtonClick = () => {
-    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
+    console.log(window,'window')
+    window.top.postMessage({ event: "showModal" }, "*");
     setShowModal(true);
   };
   console.log(showModal, "modal console");
