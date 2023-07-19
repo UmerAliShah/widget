@@ -56,7 +56,7 @@ const WidgetPopup = () => {
     localStorage.setItem("modal", showModal)
   }, [showModal]);
   const handleButtonClick = () => {
-    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
+    window.top.postMessage(JSON.stringify({ event: "showModal" }), "https://zzra-017.dx.commercecloud.salesforce.com/");
     setShowModal(true);
   };
   console.log(showModal, "modal console");
