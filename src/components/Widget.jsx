@@ -53,7 +53,7 @@ const WidgetPopup = () => {
   ];
 
   useEffect(() => {
-    window.top.postMessage({ event: showModal }, "https://zzra-017.dx.commercecloud.salesforce.com/");
+    window.top.postMessage({ event: showModal }, "*");
   }, [showModal]);
   const handleButtonClick = () => {
     setShowModal(true);
