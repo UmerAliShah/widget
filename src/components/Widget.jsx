@@ -54,9 +54,9 @@ const WidgetPopup = () => {
 
   useEffect(() => {
     localStorage.setItem("modal", showModal)
-    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
   }, [showModal]);
   const handleButtonClick = () => {
+    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
     setShowModal(true);
   };
   console.log(showModal, "modal console");

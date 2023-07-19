@@ -80,8 +80,8 @@
     </script>
     <script>
       window.addEventListener("message", function (event) {
+          console.log(event, "hello");
         if (event.origin !== "https://donation-widget.vercel.app/") return;
-        console.log(event, "hello");
       });
       //   function handleLocalStorageChange() {}
       //   window.onstorage = () => {
