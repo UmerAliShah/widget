@@ -112,7 +112,8 @@ const WidgetPopup = () => {
     <div className="widget">
       <div className="widget-button" style={{ backgroundColor: "transparent" }}>
         <Button className="btn text-white" onClick={handleButtonClick}>
-          Open Widget
+          <img className="img-icon" src={logo2} alt="Button Image" />
+          Let's Donate
         </Button>
       </div>
       <Modal
