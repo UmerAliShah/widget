@@ -4,7 +4,7 @@
     <title>Parent Page</title>
     <link href="../src/App.css" />
   </head>
-  
+
   <body>
     <h1>Parent Page</h1>
     <iframe
@@ -80,23 +80,26 @@
     </script>
     <script>
       window.addEventListener("message", function (event) {
-        console.log(event, "eve");
-        var donationWidget = document.getElementById("donationWidget");
-        if (event.data.event === true) {
-          // Button in the widget donationWidget was clicked
-          // Update the donationWidget dimensions here
-          donationWidget.style.width = "30%";
-          donationWidget.style.height = "550px";
-          console.log(donationWidget, donationWidget.style, "button clicked");
-          //   if (donationWidget.style.width === "10%") {
-          //     console.log(donationWidget.style.width, "donationWidget.style.width");
-          //   } else {
-          //   }
-        } else if (event.data.event === false) {
-          donationWidget.style.width = "10%";
-          donationWidget.style.height = "70px";
-        }
+        if (event.origin !== "https://donation-widget.vercel.app/") return;
+        console.log(event, "hello");
       });
+      //   function handleLocalStorageChange() {}
+      //   window.onstorage = () => {
+      //     console.log('worked')
+      //     var donationWidget = document.getElementById("donationWidget");
+      //     var showModal = localStorage.getItem("modal") === "true";
+      //     console.log(showModal, "showModal");
+      //     if (showModal) {
+      //       donationWidget.style.width = "30%";
+      //       donationWidget.style.height = "550px";
+      //     } else {
+      //       donationWidget.style.width = "10%";
+      //       donationWidget.style.height = "70px";
+      //     }
+      //   };
+      //   window.addEventListener("storage", handleLocalStorageChange);
+
+      //   handleLocalStorageChange();
     </script>
   </body>
 </html>
