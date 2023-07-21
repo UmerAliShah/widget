@@ -21,7 +21,6 @@ const WidgetPopup = () => {
   const [selectedAmount, setSelectedAmount] = useState(0);
 
   useEffect(() => {
-    // Retrieve donation data from local storage on component mount
     const storedData = localStorage.getItem("donationData");
     if (storedData) {
       setDonationData(JSON.parse(storedData));
@@ -82,14 +81,14 @@ const WidgetPopup = () => {
     }
 
     console.log(donation.organization, donation.amount);
+  };
+  
+  const handleDonation = () => {
+    // Handle the donation logic here
     window.parent.postMessage(
       { donationData: [...donationData, donation] },
       "*"
     );
-  };
-
-  const handleDonation = () => {
-    // Handle the donation logic here
     // ...
     localStorage.setItem(
       "donationData",
