@@ -17,19 +17,16 @@ const WidgetPopup = () => {
     slidesToScroll: 1,
   };
   const [showModal, setShowModal] = useState(false);
-  const [donationData, setDonationData] = useState([]);
+  const [donationData, setDonationData] = useState({});
   const [selectedAmount, setSelectedAmount] = useState(0);
 
   useEffect(() => {
-    // Retrieve donation data from local storage on component mount
     const storedData = localStorage.getItem("donationData");
     if (storedData) {
       setDonationData(JSON.parse(storedData));
       setSelectedAmount(JSON.parse(storedData)[0]?.amount || 0);
     }
   }, []);
-
-  console.log(donationData, "saving in widget");
 
   const organizations = [
     {
@@ -52,57 +49,46 @@ const WidgetPopup = () => {
     },
   ];
 
-
-  
   const handleButtonClick = () => {
-    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
+    window.top.postMessage({ event: "showModal" }, "*");
     setShowModal(true);
   };
-  console.log(showModal, "modal console");
 
   const handleCloseModal = () => {
     setShowModal(false);
   };
 
+  const MAX_AMOUNT_LIMIT = 50;
+
   const handleAmountClick = (org, amount) => {
     setSelectedAmount(amount);
 
-    const donation = { organization: org.name, amount: amount };
-    const existingDonationIndex = donationData.findIndex(
-      (item) => item.organization === org.name
-    );
-
-    if (existingDonationIndex !== -1) {
-      const updatedDonationData = [...donationData];
-      updatedDonationData[existingDonationIndex] = donation;
-      setDonationData(updatedDonationData);
-    } else {
-      setDonationData([...donationData, donation]);
-    }
-
-    console.log(donation.organization, donation.amount);
-    window.parent.postMessage(
-      { donationData: [...donationData, donation] },
-      "*"
-    );
+    setDonationData((prevDonationData) => {
+      const orgName = org.name;
+      const existingAmount = prevDonationData[orgName] || 0;
+      const newAmount = Math.min(existingAmount + amount, MAX_AMOUNT_LIMIT);
+      return { ...prevDonationData, [orgName]: newAmount };
+    });
   };
 
   const handleDonation = () => {
-    // Handle the donation logic here
-    // ...
-    localStorage.setItem(
-      "donationData",
-      JSON.stringify([...donationData, donationData])
+    const donations = Object.entries(donationData).map(
+      ([organization, amount]) => ({
+        organization,
+        amount,
+      })
     );
 
-    // Clear the selected amount
+    window.parent.postMessage({ donationData: donations }, "*");
+
+    localStorage.setItem("donationData", JSON.stringify(donationData));
+
     setSelectedAmount(0);
   };
 
   const handleRemoveDonation = (org) => {
-    const updatedDonationData = donationData.filter(
-      (donation) => donation.organization !== org.name
-    );
+    const updatedDonationData = { ...donationData };
+    delete updatedDonationData[org.name];
 
     setDonationData(updatedDonationData);
     localStorage.setItem("donationData", JSON.stringify(updatedDonationData));
@@ -112,8 +98,7 @@ const WidgetPopup = () => {
     <div className="widget">
       <div className="widget-button" style={{ backgroundColor: "transparent" }}>
         <Button className="btn text-white" onClick={handleButtonClick}>
-          <img className="img-icon" src={logo2} alt="Button Image" />
-          Let's Donate
+          Open Widget
         </Button>
       </div>
       <Modal
@@ -137,9 +122,7 @@ const WidgetPopup = () => {
               {organizations.map((org, index) => {
                 const isAmountSelected =
                   selectedAmount > 0 &&
-                  org.name ===
-                    donationData.find((item) => item.organization === org.name)
-                      ?.organization;
+                  donationData[org.name] === selectedAmount;
                 return (
                   <div className="main-slide" key={index}>
                     <h5 className="text-dark">{org.name}</h5>
