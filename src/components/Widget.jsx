@@ -69,7 +69,7 @@ const WidgetPopup = () => {
   };
 
   const handleAmountClick = (org, amount) => {
-    setSelectedAmount({ ...selectedAmount, amount });
+    setSelectedAmount(amount);
 
     const donation = { organization: org.name, amount: amount };
     const existingDonationIndex = donationData.findIndex(
@@ -102,6 +102,13 @@ const WidgetPopup = () => {
   };
 
   const handleDonation = () => {
+    // You may want to perform other actions related to donation here,
+    // like sending the donation data to your backend or handling the donation process.
+
+    // Send the donationData in the postMessage
+    window.parent.postMessage({ donationData, totalAmount }, "*");
+
+    // Reset the selected amount to 0
     setSelectedAmount(0);
   };
 
