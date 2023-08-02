@@ -12,6 +12,13 @@ body {
   z-index: 9999;
 }
 
+.widget-button {
+  position: fixed;
+  bottom: 20px;
+  padding: 5px;
+  right: 20px;
+} 
+
 .widget-popup {
   position: fixed !important;
   right: 10px !important;

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, FormControl, InputGroup } from "react-bootstrap";
-import img_logo from "../images/heart_logo.png";
+import img_logo from "../images/logo.png";
 import logo from "../images/logo.png";
+import basket from "../images/basket.png";
 import logo2 from "../images/logo2.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "react-slick";
@@ -17,17 +18,25 @@ const WidgetPopup = () => {
     slidesToScroll: 1,
   };
   const [showModal, setShowModal] = useState(false);
-  const [donationData, setDonationData] = useState({});
-  console.log(donationData,'don')
+  const [donationData, setDonationData] = useState([]);
   const [selectedAmount, setSelectedAmount] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0); // New variable to store the total amount selected
+  const [showBasket, setShowBasket] = useState(false); // To show/hide the basket modal
 
-  useEffect(() => {
-    const storedData = localStorage.getItem("donationData");
-    if (storedData) {
-      setDonationData(JSON.parse(storedData));
-      setSelectedAmount(JSON.parse(storedData)[0]?.amount || 0);
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Retrieve donation data from local storage on component mount
+  //   const storedData = localStorage.getItem("donationData");
+  //   if (storedData) {
+  //     setDonationData(JSON.parse(storedData));
+  //     setSelectedAmount(JSON.parse(storedData)[0]?.amount || 0);
+
+  //     // Calculate total amount
+  //     const total = JSON.parse(storedData).reduce((sum, { amount }) => sum + amount, 0);
+  //     setTotalAmount(total);
+  //   }
+  // }, []);
+
+  console.log(donationData, "saving in widget");
 
   const organizations = [
     {
@@ -51,7 +60,7 @@ const WidgetPopup = () => {
   ];
 
   const handleButtonClick = () => {
-    window.top.postMessage({ event: "showModal" }, "*");
+    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
     setShowModal(true);
   };
 
@@ -59,47 +68,62 @@ const WidgetPopup = () => {
     setShowModal(false);
   };
 
-  const MAX_AMOUNT_LIMIT = 50;
-
   const handleAmountClick = (org, amount) => {
-    setSelectedAmount(amount);
+    setSelectedAmount({ ...selectedAmount, amount });
 
-    setDonationData((prevDonationData) => {
-      const orgName = org.name;
-      const existingAmount = prevDonationData[orgName] || 0;
-      const newAmount = Math.min(existingAmount + amount, MAX_AMOUNT_LIMIT);
-      return { ...prevDonationData, [orgName]: newAmount };
-    });
+    const donation = { organization: org.name, amount: amount };
+    const existingDonationIndex = donationData.findIndex(
+      (item) => item.organization === org.name
+    );
+
+    if (existingDonationIndex !== -1) {
+      const updatedDonationData = [...donationData];
+      updatedDonationData[existingDonationIndex] = donation;
+      setDonationData(updatedDonationData);
+    } else {
+      setDonationData([...donationData, donation]);
+    }
+
+    // Update total amount
+    const total =
+      donationData.reduce((sum, { amount }) => sum + amount, 0) + amount;
+    setTotalAmount(total);
+
+    console.log(donation.organization, donation.amount);
+    window.parent.postMessage(
+      { donationData: [...donationData, donation] },
+      "*"
+    );
+  };
+
+  // Function to toggle basket modal
+  const toggleBasketModal = () => {
+    setShowBasket((prev) => !prev);
   };
 
   const handleDonation = () => {
-    const donations = Object.entries(donationData).map(
-      ([organization, amount]) => ({
-        organization,
-        amount,
-      })
-    );
-
-    window.parent.postMessage({ donationData: donations }, "*");
-
-    localStorage.setItem("donationData", JSON.stringify(donationData));
-
     setSelectedAmount(0);
   };
 
   const handleRemoveDonation = (org) => {
-    const updatedDonationData = { ...donationData };
-    delete updatedDonationData[org.name];
+    const updatedDonationData = donationData.filter(
+      (donation) => donation.organization !== org.name
+    );
 
     setDonationData(updatedDonationData);
-    localStorage.setItem("donationData", JSON.stringify(updatedDonationData));
   };
 
   return (
     <div className="widget">
       <div className="widget-button" style={{ backgroundColor: "transparent" }}>
         <Button className="btn text-white" onClick={handleButtonClick}>
-          Open Widget
+          <img
+            className="img-icon"
+            width="30px"
+            src={logo2}
+            alt="Button Image"
+          />
+          Let's Donate
         </Button>
       </div>
       <Modal
@@ -116,6 +140,40 @@ const WidgetPopup = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title className="text-dark">Kind Heart</Modal.Title>
+          <div
+            className="wrapper"
+            style={{ width: "60%", display: "flex", justifyContent: "end" }}
+          >
+            <Button
+              style={{ marginRight: "1.5rem" }}
+              className="btn text-white donate-btn"
+              variant="secondary"
+              onClick={handleDonation}
+            >
+              Donate
+            </Button>
+            <div className="basket" style={{ alignSelf: "center" }}>
+              <img
+                src={basket}
+                alt=""
+                onClick={toggleBasketModal}
+                style={{ cursor: "pointer" }}
+              />
+              {showBasket && (
+                <div className="basket-modal">
+                  <h3>Selected Donations:</h3>
+                  <ul>
+                    {donationData.map((donation, index) => (
+                      <li key={index}>
+                        {donation.organization}: ${donation.amount}
+                      </li>
+                    ))}
+                  </ul>
+                  <p>Total Amount: ${totalAmount}</p>
+                </div>
+              )}
+            </div>
+          </div>
         </Modal.Header>
         <Modal.Body>
           <div>
@@ -123,7 +181,9 @@ const WidgetPopup = () => {
               {organizations.map((org, index) => {
                 const isAmountSelected =
                   selectedAmount > 0 &&
-                  donationData[org.name] === selectedAmount;
+                  org.name ===
+                    donationData.find((item) => item.organization === org.name)
+                      ?.organization;
                 return (
                   <div className="main-slide" key={index}>
                     <h5 className="text-dark">{org.name}</h5>
@@ -163,6 +223,7 @@ const WidgetPopup = () => {
                           type="number"
                           className="form-group"
                           placeholder="Custom Amount"
+                          step={5}
                           onChange={(e) => {
                             const customAmount = parseInt(e.target.value);
                             if (!isNaN(customAmount)) {
@@ -181,13 +242,6 @@ const WidgetPopup = () => {
                         Remove
                       </Button>
                     )}
-                    <Button
-                      className="btn text-white donate-btn"
-                      variant="secondary"
-                      onClick={handleDonation}
-                    >
-                      Donate
-                    </Button>
                   </div>
                 );
               })}
