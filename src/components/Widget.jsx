@@ -36,8 +36,6 @@ const WidgetPopup = () => {
   //   }
   // }, []);
 
-  console.log(donationData, "saving in widget");
-
   const organizations = [
     {
       name: "Donation To Food Wise",
