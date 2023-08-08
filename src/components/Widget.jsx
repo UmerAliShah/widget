@@ -86,12 +86,6 @@ const WidgetPopup = () => {
     const total =
       donationData.reduce((sum, { amount }) => sum + amount, 0) + amount;
     setTotalAmount(total);
-
-    console.log(donation.organization, donation.amount,totalAmount,'in widget');
-    window.parent.postMessage(
-      { donationData: [...donationData, donation], totalAmount },
-      "*"
-    );
   };
 
   // Function to toggle basket modal
@@ -100,14 +94,8 @@ const WidgetPopup = () => {
   };
 
   const handleDonation = () => {
-    // You may want to perform other actions related to donation here,
-    // like sending the donation data to your backend or handling the donation process.
-
     // Send the donationData in the postMessage
     window.parent.postMessage({ donationData, totalAmount }, "*");
-
-    // Reset the selected amount to 0
-    setSelectedAmount(0);
   };
 
   const handleRemoveDonation = (org) => {
