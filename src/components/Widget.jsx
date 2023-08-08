@@ -87,7 +87,7 @@ const WidgetPopup = () => {
       donationData.reduce((sum, { amount }) => sum + amount, 0) + amount;
     setTotalAmount(total);
 
-    console.log(donation.organization, donation.amount);
+    console.log(donation.organization, donation.amount,'in widget');
     window.parent.postMessage(
       { donationData: [...donationData, donation] },
       "*"
