@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, FormControl, InputGroup } from "react-bootstrap";
 import img_logo from "../images/logo.png";
-import logo from "../images/logo.png";
-import basket from "../images/basket.png";
-import logo2 from "../images/logo2.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import basket from "../images/basket.png";
+import logo from "../images/logo.png";
+import logo2 from "../images/logo2.png";
 
 const WidgetPopup = () => {
   const settings = {
@@ -20,22 +20,32 @@ const WidgetPopup = () => {
   const [showModal, setShowModal] = useState(false);
   const [donationData, setDonationData] = useState([]);
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [totalAmount, setTotalAmount] = useState(0); // New variable to store the total amount selected
-  const [showBasket, setShowBasket] = useState(false); // To show/hide the basket modal
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [showBasket, setShowBasket] = useState(false);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("Donation Data");
+    const storedTotalAmount = localStorage.getItem("Total Amount");
+    if (storedData) {
+      setDonationData(JSON.parse(storedData));
+      setTotalAmount(parseInt(storedTotalAmount));
+    }
+  }, []);
 
   // useEffect(() => {
-  //   // Retrieve donation data from local storage on component mount
-  //   const storedData = localStorage.getItem("donationData");
-  //   if (storedData) {
-  //     setDonationData(JSON.parse(storedData));
-  //     setSelectedAmount(JSON.parse(storedData)[0]?.amount || 0);
-
-  //     // Calculate total amount
-  //     const total = JSON.parse(storedData).reduce((sum, { amount }) => sum + amount, 0);
-  //     setTotalAmount(total);
-  //   }
-  // }, []);
-
+  //   localStorage.setItem("Donation Data", JSON.stringify(donationData));
+  //   localStorage.setItem("Total Amount", totalAmount.toString());
+  // }, [donationData, totalAmount]);
+  const saveToLocalStorage = (dataKey, data) => {
+    return new Promise((resolve, reject) => {
+      try {
+        localStorage.setItem(dataKey, JSON.stringify(data));
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
   const organizations = [
     {
       name: "Donation To Food Wise",
@@ -66,6 +76,10 @@ const WidgetPopup = () => {
     setShowModal(false);
   };
 
+  const toggleBasketModal = () => {
+    setShowBasket((prev) => !prev);
+  };
+
   const handleAmountClick = (org, amount) => {
     setSelectedAmount(amount);
 
@@ -86,16 +100,13 @@ const WidgetPopup = () => {
     const total =
       donationData.reduce((sum, { amount }) => sum + amount, 0) + amount;
     setTotalAmount(total);
-  };
+    const updatedDonationData =
+      existingDonationIndex !== -1
+        ? [...donationData]
+        : [...donationData, donation];
 
-  // Function to toggle basket modal
-  const toggleBasketModal = () => {
-    setShowBasket((prev) => !prev);
-  };
-
-  const handleDonation = () => {
-    // Send the donationData in the postMessage
-    window.parent.postMessage({ donationData, totalAmount }, "*");
+    saveToLocalStorage("Donation Data", updatedDonationData);
+    saveToLocalStorage("Total Amount", total);
   };
 
   const handleRemoveDonation = (org) => {
@@ -104,6 +115,25 @@ const WidgetPopup = () => {
     );
 
     setDonationData(updatedDonationData);
+  };
+
+  function handleMessage(event) {
+    // if (typeof event.data === "string") {
+    //   console.log("Received message from parent site:", event.data);
+    // }
+    if (event.data) {
+      setDonationData([]);
+      setTotalAmount(0);
+      saveToLocalStorage("Donation Data", []);
+    saveToLocalStorage("Total Amount", 0);
+    }
+  }
+
+  window.addEventListener("message", handleMessage);
+
+  const handleDonation = () => {
+    // Send the donationData and totalAmount in the postMessage
+    window.parent.postMessage({ donationData, totalAmount }, "*");
   };
 
   return (
@@ -174,9 +204,7 @@ const WidgetPopup = () => {
               {organizations.map((org, index) => {
                 const isAmountSelected =
                   selectedAmount > 0 &&
-                  org.name ===
-                    donationData.find((item) => item.organization === org.name)
-                      ?.organization;
+                  donationData.find((item) => item.organization === org.name);
                 return (
                   <div className="main-slide" key={index}>
                     <h5 className="text-dark">{org.name}</h5>
