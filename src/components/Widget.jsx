@@ -117,33 +117,33 @@ const WidgetPopup = () => {
     setDonationData(updatedDonationData);
   };
 
-  function handleMessage(event) {
-    if (event.origin !== window.location.origin) {
-      return;
-    }
+  // function handleMessage(event) {
+  //   if (event.origin !== window.location.origin) {
+  //     return;
+  //   }
 
-    // Handle the message received from the parent site
-    const message = event.data;
+  //   // Handle the message received from the parent site
+  //   const message = event.data;
 
-    if (message.type === "updateDonationData") {
-      // Update the donation data and total amount based on the data received
-      const { donationData, totalAmount } = message.data;
-      setDonationData(donationData);
-      setTotalAmount(totalAmount);
-      // Update local storage if needed
-      saveToLocalStorage("Donation Data", donationData);
-      saveToLocalStorage("Total Amount", totalAmount);
-    }
+  //   if (message.type === "updateDonationData") {
+  //     // Update the donation data and total amount based on the data received
+  //     const { donationData, totalAmount } = message.data;
+  //     setDonationData(donationData);
+  //     setTotalAmount(totalAmount);
+  //     // Update local storage if needed
+  //     saveToLocalStorage("Donation Data", donationData);
+  //     saveToLocalStorage("Total Amount", totalAmount);
+  //   }
 
-    // Check if the message is from the parent site's button click
-    if (message.message === "Hello from Parent Site!") {
-      // Handle the data sent from the parent site
-      console.log("Received message from parent site:", message.message);
-      // Perform any actions you need with the received data
-    }
-  }
+  //   // Check if the message is from the parent site's button click
+  //   if (message.message === "Hello from Parent Site!") {
+  //     // Handle the data sent from the parent site
+  //     console.log("Received message from parent site:", message.message);
+  //     // Perform any actions you need with the received data
+  //   }
+  // }
 
-  window.addEventListener("message", handleMessage);
+  // window.addEventListener("message", handleMessage);
 
   const handleDonation = () => {
     // Send the donationData and totalAmount in the postMessage
