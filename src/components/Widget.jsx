@@ -118,14 +118,28 @@ const WidgetPopup = () => {
   };
 
   function handleMessage(event) {
-    // if (typeof event.data === "string") {
-    //   console.log("Received message from parent site:", event.data);
-    // }
-    if (event.data) {
-      setDonationData([]);
-      setTotalAmount(0);
-      saveToLocalStorage("Donation Data", []);
-    saveToLocalStorage("Total Amount", 0);
+    if (event.origin !== window.location.origin) {
+      return;
+    }
+
+    // Handle the message received from the parent site
+    const message = event.data;
+
+    if (message.type === "updateDonationData") {
+      // Update the donation data and total amount based on the data received
+      const { donationData, totalAmount } = message.data;
+      setDonationData(donationData);
+      setTotalAmount(totalAmount);
+      // Update local storage if needed
+      saveToLocalStorage("Donation Data", donationData);
+      saveToLocalStorage("Total Amount", totalAmount);
+    }
+
+    // Check if the message is from the parent site's button click
+    if (message.message === "Hello from Parent Site!") {
+      // Handle the data sent from the parent site
+      console.log("Received message from parent site:", message.message);
+      // Perform any actions you need with the received data
     }
   }
 
