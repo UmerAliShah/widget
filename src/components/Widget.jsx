@@ -114,6 +114,19 @@ const WidgetPopup = () => {
       (donation) => donation.organization !== org.name
     );
 
+    const removedDonation = donationData.find(
+      (donation) => donation.organization === org.name
+    );
+
+    if (removedDonation) {
+      const newTotalAmount = totalAmount - removedDonation.amount;
+      setTotalAmount(newTotalAmount);
+
+      // Update local storage with the new donation data and total amount
+      saveToLocalStorage("Donation Data", updatedDonationData);
+      saveToLocalStorage("Total Amount", newTotalAmount);
+    }
+
     setDonationData(updatedDonationData);
   };
 
