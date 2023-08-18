@@ -24,28 +24,26 @@ const WidgetPopup = () => {
   const [showBasket, setShowBasket] = useState(false);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("Donation Data");
-    const storedTotalAmount = localStorage.getItem("Total Amount");
+    const storedData = localStorage.getItem("DonationData");
+    const storedTotalAmount = localStorage.getItem("TotalAmount");
     if (storedData) {
       setDonationData(JSON.parse(storedData));
       setTotalAmount(parseInt(storedTotalAmount));
     }
+    window.addEventListener("message", handleMessage);
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("Donation Data", JSON.stringify(donationData));
-  //   localStorage.setItem("Total Amount", totalAmount.toString());
-  // }, [donationData, totalAmount]);
-  const saveToLocalStorage = (dataKey, data) => {
-    return new Promise((resolve, reject) => {
-      try {
-        localStorage.setItem(dataKey, JSON.stringify(data));
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
+  const handleMessage = (event) => {
+    console.log(event)
+      // const { donationData, totalAmount } = event.data.payload;
+      setDonationData([]);
+      setTotalAmount(0);
   };
+  useEffect(() => {
+    localStorage.setItem("DonationData", JSON.stringify(donationData));
+    localStorage.setItem("TotalAmount", totalAmount.toString());
+  }, [donationData, totalAmount]);
+
   const organizations = [
     {
       name: "Donation To Food Wise",
@@ -68,7 +66,6 @@ const WidgetPopup = () => {
   ];
 
   const handleButtonClick = () => {
-    window.top.postMessage(JSON.stringify({ event: "showModal" }), "*");
     setShowModal(true);
   };
 
@@ -96,17 +93,17 @@ const WidgetPopup = () => {
       setDonationData([...donationData, donation]);
     }
 
-    // Update total amount
     const total =
       donationData.reduce((sum, { amount }) => sum + amount, 0) + amount;
     setTotalAmount(total);
+
     const updatedDonationData =
       existingDonationIndex !== -1
         ? [...donationData]
         : [...donationData, donation];
 
-    saveToLocalStorage("Donation Data", updatedDonationData);
-    saveToLocalStorage("Total Amount", total);
+    localStorage.setItem("DonationData", JSON.stringify(updatedDonationData));
+    localStorage.setItem("TotalAmount", total.toString());
   };
 
   const handleRemoveDonation = (org) => {
@@ -122,44 +119,14 @@ const WidgetPopup = () => {
       const newTotalAmount = totalAmount - removedDonation.amount;
       setTotalAmount(newTotalAmount);
 
-      // Update local storage with the new donation data and total amount
-      saveToLocalStorage("Donation Data", updatedDonationData);
-      saveToLocalStorage("Total Amount", newTotalAmount);
+      localStorage.setItem("DonationData", JSON.stringify(updatedDonationData));
+      localStorage.setItem("TotalAmount", newTotalAmount.toString());
     }
 
     setDonationData(updatedDonationData);
   };
 
-  // function handleMessage(event) {
-  //   if (event.origin !== window.location.origin) {
-  //     return;
-  //   }
-
-  //   // Handle the message received from the parent site
-  //   const message = event.data;
-
-  //   if (message.type === "updateDonationData") {
-  //     // Update the donation data and total amount based on the data received
-  //     const { donationData, totalAmount } = message.data;
-  //     setDonationData(donationData);
-  //     setTotalAmount(totalAmount);
-  //     // Update local storage if needed
-  //     saveToLocalStorage("Donation Data", donationData);
-  //     saveToLocalStorage("Total Amount", totalAmount);
-  //   }
-
-  //   // Check if the message is from the parent site's button click
-  //   if (message.message === "Hello from Parent Site!") {
-  //     // Handle the data sent from the parent site
-  //     console.log("Received message from parent site:", message.message);
-  //     // Perform any actions you need with the received data
-  //   }
-  // }
-
-  // window.addEventListener("message", handleMessage);
-
   const handleDonation = () => {
-    // Send the donationData and totalAmount in the postMessage
     window.parent.postMessage({ donationData, totalAmount }, "*");
   };
 
@@ -167,12 +134,7 @@ const WidgetPopup = () => {
     <div className="widget">
       <div className="widget-button" style={{ backgroundColor: "transparent" }}>
         <Button className="btn text-white" onClick={handleButtonClick}>
-          <img
-            className="img-icon"
-            width="30px"
-            src={logo2}
-            alt="Button Image"
-          />
+          <img className="img-icon" width="30px" src={logo2} alt="Button Image" />
           Let's Donate
         </Button>
       </div>
