@@ -39,10 +39,10 @@ const WidgetPopup = () => {
       setDonationData([]);
       setTotalAmount(0);
   };
-  useEffect(() => {
-    localStorage.setItem("DonationData", JSON.stringify(donationData));
-    localStorage.setItem("TotalAmount", totalAmount.toString());
-  }, [donationData, totalAmount]);
+  // useEffect(() => {
+  //   localStorage.setItem("DonationData", JSON.stringify(donationData));
+  //   localStorage.setItem("TotalAmount", totalAmount.toString());
+  // }, [donationData, totalAmount]);
 
   const organizations = [
     {
