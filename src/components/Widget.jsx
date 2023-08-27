@@ -19,25 +19,27 @@ const WidgetPopup = () => {
   };
   const [showModal, setShowModal] = useState(false);
   const [donationData, setDonationData] = useState([]);
+  console.log(donationData, "don data");
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
+  console.log(totalAmount, "total data");
   const [showBasket, setShowBasket] = useState(false);
 
   useEffect(() => {
     const storedData = localStorage.getItem("DonationData");
     const storedTotalAmount = localStorage.getItem("TotalAmount");
-    if (storedData) {
-      setDonationData(JSON.parse(storedData));
-      setTotalAmount(parseInt(storedTotalAmount));
-    }
+    setDonationData(JSON.parse(storedData));
+    setTotalAmount(parseInt(storedTotalAmount));
     window.addEventListener("message", handleMessage);
   }, []);
 
   const handleMessage = (event) => {
-    console.log(event)
-      // const { donationData, totalAmount } = event.data.payload;
+    console.log(event);
+    // const { donationData, totalAmount } = event.data.payload;
+    if (event.data.message) {
       setDonationData([]);
       setTotalAmount(0);
+    }
   };
   // useEffect(() => {
   //   localStorage.setItem("DonationData", JSON.stringify(donationData));
@@ -134,7 +136,12 @@ const WidgetPopup = () => {
     <div className="widget">
       <div className="widget-button" style={{ backgroundColor: "transparent" }}>
         <Button className="btn text-white" onClick={handleButtonClick}>
-          <img className="img-icon" width="30px" src={logo2} alt="Button Image" />
+          <img
+            className="img-icon"
+            width="30px"
+            src={logo2}
+            alt="Button Image"
+          />
           Let's Donate
         </Button>
       </div>
