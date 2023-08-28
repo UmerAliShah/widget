@@ -19,17 +19,15 @@ const WidgetPopup = () => {
   };
   const [showModal, setShowModal] = useState(false);
   const [donationData, setDonationData] = useState([]);
-  console.log(donationData, "don data");
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
-  console.log(totalAmount, "total data");
   const [showBasket, setShowBasket] = useState(false);
 
   useEffect(() => {
     const storedData = localStorage.getItem("DonationData");
     const storedTotalAmount = localStorage.getItem("TotalAmount");
-    setDonationData(JSON.parse(storedData));
-    setTotalAmount(parseInt(storedTotalAmount));
+    setDonationData(JSON.parse(storedData) || []);
+    setTotalAmount(parseInt(storedTotalAmount || 0));
     window.addEventListener("message", handleMessage);
   }, []);
 
